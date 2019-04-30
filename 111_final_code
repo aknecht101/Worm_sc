@@ -1,0 +1,37 @@
+#Figure 1:
+#Load Packages
+library(Seurat)
+
+#Load Data sets:
+load("C:\\Users\\abk289\\Documents\\R\\Hofstenia_JA_CCA_integrated_dim12.Rdata")
+load("C:\\Users\\meh374\\Documents\\G1Spring\\MCB111\\FinalProject\\Hofstenia_J.Rdata")
+load("C:\\Users\\kal577\\Documents\\R\\Rstuff\\adult_juv_merged.Rdata")
+
+#Juvenile tSNE
+#Cluster Analysis of Juveniles
+data <- RunPCA(object = data)
+data <- FindClusters(object = data)
+data <- RunTSNE(object = data)
+DimPlot(object = data, reduction = "tsne")
+
+#Cluster Analysis of Juvenile and Adult / Integrated Data Set
+
+#Figure 2:
+#Projection of HES1 onto tsne of Integrated Data Set:
+FeaturePlot(data.integrated, c("98048776|hes1"), min.cutoff = "q9", cols.use = c("lightgrey", "blue"), pt.size = 0.5)
+
+#Projection of HES1 onto the Adult/Juvenile data set:
+FeaturePlot(adult_juv_merged.integrated, c("98048776|hes1"), cols.use = c("grey", "blue"), pt.size = 0.5)
+
+#Figure 3:
+#Double Projection of genes DDX4 and NOTC2 for integrated data set: worked but decided not to show in presentation
+FeaturePlot(object = data.integrated, features.plot = c("98041294|ddx4-2", "98025025|notc2"), cols.use = c("lightgrey", "orange", "blue", "red"), overlay = TRUE, no.legend = FALSE)
+
+#Things we also tried:
+
+#UMAP projection: We had trouble calling Python in order to use function “RunUMAP”
+library(reticulate)
+use_python("C:\\Users\\meh374\\AppData\\Local\\Continuum", required = T)
+data <- ScaleData(object = data)
+data <- RunPCA(object = data, npcs = 30)
+data <- RunUMAP(data, reduction.use = "pca", dims.use = 1:12)
